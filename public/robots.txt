@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://nepal-air-quality.vercel.app/sitemap.xml
