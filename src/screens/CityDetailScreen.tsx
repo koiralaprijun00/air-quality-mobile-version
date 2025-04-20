@@ -1,13 +1,13 @@
 import React from 'react';
 import { View, StyleSheet, ScrollView } from 'react-native';
-import { Card, Title, Paragraph, List } from 'react-native-paper';
+import { Card, Title, Paragraph, List, ListIconProps, CardContent, ListSection, ListItem, ListIcon } from 'react-native-paper';
 import { calculateOverallAqi } from '../services/AqiCalculator';
 import { CityData, RootStackParamList } from '../types';
 import { NativeStackScreenProps } from '@react-navigation/native-stack';
 
 type CityDetailScreenProps = NativeStackScreenProps<RootStackParamList, 'CityDetail'>;
 
-const CityDetailScreen: React.FC<CityDetailScreenProps> = ({ route }) => {
+const CityDetailScreen: React.FC<CityDetailScreenProps> = ({ route }: CityDetailScreenProps) => {
   const { city } = route.params;
   const airQualityData = city.sampleData[0];
   const aqiData = calculateOverallAqi(airQualityData?.components || {});
@@ -33,7 +33,7 @@ const CityDetailScreen: React.FC<CityDetailScreenProps> = ({ route }) => {
   return (
     <ScrollView style={styles.container}>
       <Card style={styles.card}>
-        <Card.Content>
+        <CardContent>
           <Title style={styles.title}>{city.name}</Title>
           <View style={styles.aqiContainer}>
             <Title style={[styles.aqiValue, { color: getAQIColor(aqiData.aqi) }]}>
@@ -44,52 +44,55 @@ const CityDetailScreen: React.FC<CityDetailScreenProps> = ({ route }) => {
           <Paragraph style={styles.recommendation}>
             {getHealthRecommendation(aqiData.aqi)}
           </Paragraph>
-        </Card.Content>
+        </CardContent>
       </Card>
 
       <Card style={styles.card}>
-        <Card.Content>
+        <CardContent>
           <Title>Pollutants</Title>
-          <List.Section>
-            {Object.entries(airQualityData?.components || {}).map(([key, value]) => (
-              <List.Item
-                key={key}
-                title={formatPollutantName(key)}
-                description={`${value.toFixed(2)} µg/m³`}
-                left={props => <List.Icon {...props} icon="alert-circle" />}
-              />
-            ))}
-          </List.Section>
-        </Card.Content>
+          <ListSection>
+            {Object.entries(airQualityData?.components || {}).map(([key, value]) => {
+              const numericValue = Number(value);
+              return (
+                <ListItem
+                  key={key}
+                  title={formatPollutantName(key)}
+                  description={`${numericValue.toFixed(2)} µg/m³`}
+                  left={props => <ListIcon {...props} icon="alert-circle" />}
+                />
+              );
+            })}
+          </ListSection>
+        </CardContent>
       </Card>
 
       {airQualityData?.weather && (
         <Card style={styles.card}>
-          <Card.Content>
+          <CardContent>
             <Title>Weather</Title>
-            <List.Section>
-              <List.Item
+            <ListSection>
+              <ListItem
                 title="Temperature"
                 description={`${Math.round(airQualityData.weather.temp)}°C`}
-                left={props => <List.Icon {...props} icon="thermometer" />}
+                left={props => <ListIcon {...props} icon="thermometer" />}
               />
-              <List.Item
+              <ListItem
                 title="Feels Like"
                 description={`${Math.round(airQualityData.weather.feels_like)}°C`}
-                left={props => <List.Icon {...props} icon="thermometer-lines" />}
+                left={props => <ListIcon {...props} icon="thermometer-lines" />}
               />
-              <List.Item
+              <ListItem
                 title="Humidity"
                 description={`${airQualityData.weather.humidity}%`}
-                left={props => <List.Icon {...props} icon="water" />}
+                left={props => <ListIcon {...props} icon="water" />}
               />
-              <List.Item
+              <ListItem
                 title="Wind Speed"
                 description={`${airQualityData.weather.wind_speed} m/s`}
-                left={props => <List.Icon {...props} icon="weather-windy" />}
+                left={props => <ListIcon {...props} icon="weather-windy" />}
               />
-            </List.Section>
-          </Card.Content>
+            </ListSection>
+          </CardContent>
         </Card>
       )}
     </ScrollView>
