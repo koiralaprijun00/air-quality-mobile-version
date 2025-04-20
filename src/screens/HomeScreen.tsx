@@ -1,18 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { View, StyleSheet, ActivityIndicator } from 'react-native';
-import MapView, { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
+import { View, StyleSheet, ActivityIndicator, Text } from 'react-native';
+import { Marker, PROVIDER_GOOGLE } from 'react-native-maps';
 import { Searchbar, Card, Title, Paragraph } from 'react-native-paper';
 import { calculateOverallAqi } from '../services/AqiCalculator';
 import { CityData, RootStackParamList } from '../types';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import { useNavigation } from '@react-navigation/native';
 
-type HomeScreenNavigationProp = NativeStackNavigationProp<RootStackParamList, 'Home'>;
+const MapView = require('react-native-maps').default;
 
-interface HomeScreenProps {
-  navigation: HomeScreenNavigationProp;
-}
-
-const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
+const HomeScreen: React.FC = () => {
+  const navigation = useNavigation();
   const [cityData, setCityData] = useState<CityData | null>(null);
   const [citiesData, setCitiesData] = useState<CityData[]>([]);
   const [loading, setLoading] = useState(true);
@@ -97,11 +94,11 @@ const HomeScreen: React.FC<HomeScreenProps> = ({ navigation }) => {
       </MapView>
       {cityData && (
         <Card style={styles.infoCard}>
-          <Card.Content>
+          <View style={styles.cardContent}>
             <Title>{cityData.name}</Title>
-            <Paragraph>Air Quality Index: {calculateOverallAqi(cityData.sampleData[0]?.components || {}).aqi.toFixed(0)}</Paragraph>
-            <Paragraph>Status: {getAQIStatus(calculateOverallAqi(cityData.sampleData[0]?.components || {}).aqi)}</Paragraph>
-          </Card.Content>
+            <Text>Air Quality Index: {calculateOverallAqi(cityData.sampleData[0]?.components || {}).aqi.toFixed(0)}</Text>
+            <Text>Status: {getAQIStatus(calculateOverallAqi(cityData.sampleData[0]?.components || {}).aqi)}</Text>
+          </View>
         </Card>
       )}
     </View>
@@ -149,6 +146,9 @@ const styles = StyleSheet.create({
     backgroundColor: 'white',
     borderRadius: 8,
     elevation: 4,
+  },
+  cardContent: {
+    padding: 16,
   },
 });
 

@@ -9,12 +9,20 @@
     "userInterfaceStyle": "automatic",
     "newArchEnabled": true,
     "ios": {
-      "supportsTablet": true
+      "supportsTablet": true,
+      "config": {
+        "googleMapsApiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+      }
     },
     "android": {
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#ffffff"
+      },
+      "config": {
+        "googleMaps": {
+          "apiKey": "YOUR_GOOGLE_MAPS_API_KEY"
+        }
       }
     },
     "web": {
@@ -24,6 +32,7 @@
     },
     "plugins": [
       "expo-router",
+      "expo-location",
       [
         "expo-splash-screen",
         {
