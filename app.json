@@ -1,0 +1,18 @@
+{
+  "expo": {
+    "name": "nepal-air-quality-mobile",
+    "slug": "nepal-air-quality-mobile",
+    "version": "1.0.0",
+    "sdkVersion": "50.0.0",
+    "platforms": [
+      "ios",
+      "android"
+    ],
+    "android": {
+      "package": "com.nepalihawa"
+    },
+    "ios": {
+      "bundleIdentifier": "com.nepalihawa"
+    }
+  }
+}
